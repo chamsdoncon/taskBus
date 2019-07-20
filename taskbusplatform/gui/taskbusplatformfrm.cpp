@@ -22,7 +22,7 @@ taskBusPlatformFrm::taskBusPlatformFrm(QWidget *parent) :
 	m_pMsgModel(new QStandardItemModel(this)),
 	m_pClassModel(new QStandardItemModel(this))
 {
-	ui->setupUi(this);	
+	ui->setupUi(this);
 	setCentralWidget(ui->mdiArea);
 	//全部模块 Create Module for All taskModules
 	m_pRefModule = m_toolModules[tr("All")] = new taskModule(true,this);
@@ -48,13 +48,13 @@ taskBusPlatformFrm::taskBusPlatformFrm(QWidget *parent) :
 
 	QMenu * me = new QMenu(this);
 	me->addAction(ui->actionhideWindow);
-	me->addAction(ui->action_Exit);
+	me->addAction(ui->action_About);
+	m_pTrayIcon->setContextMenu(me);
+	connect(m_pTrayIcon,&QSystemTrayIcon::activated,this,&taskBusPlatformFrm::slot_traymessage);
 	ui->menu_View->insertAction(ui->actionhideWindow,ui->dockWidget_message->toggleViewAction());
 	ui->menu_View->insertAction(ui->actionhideWindow,ui->dockWidget_modules->toggleViewAction());
 	ui->menu_View->insertAction(ui->actionhideWindow,ui->dockWidget_props->toggleViewAction());
 	ui->menu_View->insertAction(ui->actionhideWindow,ui->dockWidget_watch->toggleViewAction());
-	m_pTrayIcon->setContextMenu(me);
-	connect(m_pTrayIcon,&QSystemTrayIcon::activated,this,&taskBusPlatformFrm::slot_traymessage);
 
 }
 
@@ -104,7 +104,7 @@ void taskBusPlatformFrm::timerEvent(QTimerEvent *event)
 			m_pTrayIcon->setIcon(m_iconTray[0]);
 		}
 		g_totalsent = 0;
-		g_totalrev = 0;	
+		g_totalrev = 0;
 	}
 }
 
@@ -131,6 +131,7 @@ void taskBusPlatformFrm::slot_showPropModel(QObject * objModel)
 
 void taskBusPlatformFrm::on_action_About_triggered()
 {
+	show();
 	DlgAbout about(this);
 	if (about.exec()==QDialog::Accepted)
 		QApplication::aboutQt();
